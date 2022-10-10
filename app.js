@@ -13,6 +13,20 @@ const app = express();
 
 const port = process.env.PORT || 3000;
 
+const fortunes = [
+    "conquer your fears",
+    "Rivers need spring",
+    "Do not fear what you dont know",
+    "You will have a pleasant suprise",
+    "Whenever possible, keep it simple"
+];
+
+
+/**
+ * Adding static files
+ */
+
+app.use(express.static(__dirname+"/public"));
 
 /**
  * express handlebars configuration
@@ -32,7 +46,12 @@ app.set("view engine", "handlebars");
 //end of handlebar engine configuration
 
 /**
- * 
+ * HTTP verb
+ * ***********
+ * POST
+ * GET
+ * PUT
+ * DELETE
  * 
  */
 
@@ -41,12 +60,13 @@ app.get("/", (req, res)=>{
 })
 
 app.get("/about",(req, res)=>{
-    res.render("about");
+    const randomFortune = fortunes[Math.floor(Math.random()* fortunes.length)];
+    res.render("about", {fortune: randomFortune});
 })
 
 
 /**
- * custome eror handling
+ * custom made erorr handling
  */
 
 app.use((req, res)=>{
@@ -62,7 +82,11 @@ app.use((err,req, res,next)=>{
     res.render("500");
 })
 
-//listening port
+
+/** 
+ * listening port
+ * */
+
 app.listen(port, ()=>{
     console.log(`Express start on http://localhost:${port}\n`+
     `press ctrl-c to terminate`);
